@@ -1,0 +1,20 @@
+This is a stripped-down version of the 'closest' command from CPPTRAJ for
+testing purposes.
+
+** To Install **
+Run './configure' followed by 'make install'. This will create the
+binary 'a.out' in this directory. This binary requires NetCDF. If not
+in your system paths, the location can be specified to 'configure' using
+'--with-netcdf <dir>'. A full list of configure options can be obtained
+with './configure --help'.
+
+** To Test **
+The binary can be tested with 'make test'. By default it will look for
+the following files:
+  tz2.truncoct.parm7: Amber Topology: Trpzip2 (13 residues) in TIP3P solvent.
+  tz2.truncoct.nc: Amber NetCDF trajectory, 10 frames.
+
+** To Run **
+Command-line options can be obtained by running './a.out --help'.
+
+For questions contact Daniel R. Roe: daniel.r.roe@gmail.com

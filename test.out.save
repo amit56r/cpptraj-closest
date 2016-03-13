@@ -1,0 +1,130 @@
+  Topology name: tz2.truncoct.parm7
+  Trajectory name: tz2.truncoct.nc
+  # closest: 10
+  Solute mask: ':1-13'
+	Topology tz2.truncoct.parm7 contains 5827 atoms.
+		Original filename: tz2.truncoct.parm7
+		1882 residues.
+		1870 molecules.
+		5834 bonds (5711 to H, 123 other).
+		402 angles (233 with H, 169 other).
+		853 dihedrals (481 with H, 372 other).
+		Box: Trunc. Oct.
+		1869 solvent molecules.
+		GB radii set: modified Bondi radii (mbondi)
+	Trajectory: 'tz2.truncoct.nc'is a NetCDF AMBER trajectory, 10 frames.
+	Frame [Input frame]:5827 atoms, 17481 coords
+    CLOSEST: Finding closest 10 solvent molecules to atoms in mask :1-13
+	Distances will be imaged.
+	Mask [:1-13] corresponds to 220 atoms.
+	Keeping 30 solvent atoms.
+Frame 1
+	Mol=      342  Atom=     1241  Dist=     1.5692
+	Mol=      351  Atom=     1268  Dist=     1.6433
+	Mol=      902  Atom=     2921  Dist=     1.6468
+	Mol=     1345  Atom=     4250  Dist=     1.7279
+	Mol=     1347  Atom=     4256  Dist=     1.7513
+	Mol=      928  Atom=     2999  Dist=     1.7734
+	Mol=     1481  Atom=     4658  Dist=     1.8011
+	Mol=     1230  Atom=     3905  Dist=     1.8124
+	Mol=      228  Atom=      899  Dist=     1.8213
+	Mol=     1560  Atom=     4895  Dist=     1.8259
+Frame 2
+	Mol=     1407  Atom=     4436  Dist=     1.6109
+	Mol=      932  Atom=     3011  Dist=     1.6620
+	Mol=      870  Atom=     2825  Dist=     1.6721
+	Mol=      957  Atom=     3086  Dist=     1.7173
+	Mol=      902  Atom=     2921  Dist=     1.7289
+	Mol=      342  Atom=     1241  Dist=     1.7560
+	Mol=      351  Atom=     1268  Dist=     1.7770
+	Mol=      935  Atom=     3020  Dist=     1.7937
+	Mol=      910  Atom=     2945  Dist=     1.8053
+	Mol=     1481  Atom=     4658  Dist=     1.8281
+Frame 3
+	Mol=      910  Atom=     2945  Dist=     1.5555
+	Mol=      902  Atom=     2921  Dist=     1.6676
+	Mol=     1372  Atom=     4331  Dist=     1.6772
+	Mol=      638  Atom=     2129  Dist=     1.7836
+	Mol=     1432  Atom=     4511  Dist=     1.8052
+	Mol=      567  Atom=     1916  Dist=     1.8159
+	Mol=     1310  Atom=     4145  Dist=     1.8233
+	Mol=      523  Atom=     1784  Dist=     1.8396
+	Mol=      935  Atom=     3020  Dist=     1.8544
+	Mol=      956  Atom=     3083  Dist=     1.8651
+Frame 4
+	Mol=      342  Atom=     1241  Dist=     1.7085
+	Mol=     1619  Atom=     5072  Dist=     1.7096
+	Mol=     1000  Atom=     3215  Dist=     1.7624
+	Mol=      831  Atom=     2708  Dist=     1.7628
+	Mol=      228  Atom=      899  Dist=     1.7716
+	Mol=      910  Atom=     2945  Dist=     1.7786
+	Mol=      928  Atom=     2999  Dist=     1.7926
+	Mol=     1543  Atom=     4844  Dist=     1.8018
+	Mol=      902  Atom=     2921  Dist=     1.8424
+	Mol=      404  Atom=     1427  Dist=     1.8463
+Frame 5
+	Mol=     1491  Atom=     4688  Dist=     1.6167
+	Mol=      228  Atom=      899  Dist=     1.7155
+	Mol=      870  Atom=     2825  Dist=     1.7539
+	Mol=      342  Atom=     1241  Dist=     1.7805
+	Mol=     1619  Atom=     5072  Dist=     1.7883
+	Mol=     1026  Atom=     3293  Dist=     1.7884
+	Mol=      831  Atom=     2708  Dist=     1.7964
+	Mol=      910  Atom=     2945  Dist=     1.8124
+	Mol=     1190  Atom=     3785  Dist=     1.8176
+	Mol=     1600  Atom=     5015  Dist=     1.8496
+Frame 6
+	Mol=     1310  Atom=     4145  Dist=     1.6906
+	Mol=     1190  Atom=     3785  Dist=     1.7405
+	Mol=     1393  Atom=     4394  Dist=     1.7472
+	Mol=      527  Atom=     1796  Dist=     1.7596
+	Mol=      870  Atom=     2825  Dist=     1.7634
+	Mol=      910  Atom=     2945  Dist=     1.7677
+	Mol=     1407  Atom=     4436  Dist=     1.7879
+	Mol=      404  Atom=     1427  Dist=     1.8072
+	Mol=      957  Atom=     3086  Dist=     1.8202
+	Mol=     1435  Atom=     4520  Dist=     1.8423
+Frame 7
+	Mol=      910  Atom=     2945  Dist=     1.6680
+	Mol=     1407  Atom=     4436  Dist=     1.6955
+	Mol=      342  Atom=     1241  Dist=     1.7055
+	Mol=      638  Atom=     2129  Dist=     1.7434
+	Mol=     1026  Atom=     3293  Dist=     1.7482
+	Mol=     1345  Atom=     4250  Dist=     1.7664
+	Mol=      160  Atom=      695  Dist=     1.7910
+	Mol=      928  Atom=     2999  Dist=     1.8019
+	Mol=      831  Atom=     2708  Dist=     1.8036
+	Mol=      631  Atom=     2108  Dist=     1.8096
+Frame 8
+	Mol=      411  Atom=     1448  Dist=     1.5992
+	Mol=      404  Atom=     1427  Dist=     1.6297
+	Mol=     1345  Atom=     4250  Dist=     1.6788
+	Mol=      567  Atom=     1916  Dist=     1.7071
+	Mol=     1190  Atom=     3785  Dist=     1.7341
+	Mol=      160  Atom=      695  Dist=     1.7408
+	Mol=      870  Atom=     2825  Dist=     1.7577
+	Mol=     1481  Atom=     4658  Dist=     1.7607
+	Mol=     1407  Atom=     4436  Dist=     1.7684
+	Mol=     1026  Atom=     3293  Dist=     1.8176
+Frame 9
+	Mol=      404  Atom=     1427  Dist=     1.6578
+	Mol=      870  Atom=     2825  Dist=     1.6810
+	Mol=      631  Atom=     2108  Dist=     1.7341
+	Mol=     1190  Atom=     3785  Dist=     1.7589
+	Mol=      567  Atom=     1916  Dist=     1.7945
+	Mol=     1345  Atom=     4250  Dist=     1.8186
+	Mol=     1481  Atom=     4658  Dist=     1.8198
+	Mol=     1696  Atom=     5303  Dist=     1.8422
+	Mol=      963  Atom=     3104  Dist=     1.8749
+	Mol=      910  Atom=     2945  Dist=     1.8919
+Frame 10
+	Mol=     1481  Atom=     4658  Dist=     1.6148
+	Mol=      404  Atom=     1427  Dist=     1.6968
+	Mol=     1696  Atom=     5303  Dist=     1.7096
+	Mol=      411  Atom=     1448  Dist=     1.7199
+	Mol=     1190  Atom=     3785  Dist=     1.7485
+	Mol=     1230  Atom=     3905  Dist=     1.7535
+	Mol=      230  Atom=      905  Dist=     1.7596
+	Mol=     1026  Atom=     3293  Dist=     1.7920
+	Mol=      228  Atom=      899  Dist=     1.7987
+	Mol=      831  Atom=     2708  Dist=     1.8541
