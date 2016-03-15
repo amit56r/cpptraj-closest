@@ -1,0 +1,67 @@
+#!/bin/bash
+
+echo ""
+NETCDF_DIR=""
+USE_CXX=""
+while [[ ! -z $1 ]] ; do
+  case "$1" in
+    "gnu" )  echo "Using GNU compilers." ; USE_CXX=g++ ;;
+    "intel") echo "Using Intel compilers." ; USE_CXX=icpc ;;
+    "--with-netcdf" ) shift ; NETCDF_DIR=$1 ;;
+    "-h" | "--help" )
+      echo "Configure options:"
+      echo "    gnu                : Use GNU compilers (g++)"
+      echo "    intel              : Use Intel compilers (icpc)"
+      echo "    --with-netcdf <dir>: Set NetCDF location to <dir>"
+      echo "    -h | --help        : Show this message."
+      echo "  ENVIRONMENT VARIABLES"
+      echo "    CXX                : C++ compiler (overrides any specified)"
+      echo "    CXXFLAGS           : C++ compiler flags"
+      echo "    LDFLAGS            : Linker flags"
+      echo ""
+      exit 0
+      ;;
+    * ) echo "Unrecognized option: $1" > /dev/stderr ; exit 1 ;;
+  esac
+  shift
+done
+
+# Compiler setup
+if [[ ! -z $CXX ]] ; then
+  if [[ ! -z $USE_CXX ]] ; then
+    echo "Warning: CXX is already set to $CXX. Using $CXX."
+  fi
+else
+  if [[ -z $USE_CXX ]] ; then
+    echo "Defaulting to GNU compilers."
+    USE_CXX=g++
+  fi
+  CXX=$USE_CXX
+fi
+
+# NetCDF location setup
+if [[ ! -z $NETCDF_DIR ]] ; then
+  echo "Using NetCDF in $NETCDF_DIR"
+  NETCDF_LIB_DIR="-L$NETCDF_DIR/lib"
+  NETCDF_INC_DIR="-I$NETCDF_DIR/include"
+fi
+
+# Generate config.h
+cat > config.h <<EOF
+# Configuration file for closest
+CXX=$CXX
+
+CXXFLAGS=$CXXFLAGS
+
+LDFLAGS=-lnetcdf $LD_FLAGS
+
+DEFINES=-DBINTRAJ -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+
+NETCDF_LIB_DIR=$NETCDF_LIB_DIR
+NETCDF_INC_DIR=$NETCDF_INC_DIR
+EOF
+echo "Cleaning any previous compile."
+make clean
+echo "Configure complete."
+echo ""
+exit 0 

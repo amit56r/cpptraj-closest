@@ -1,0 +1,28 @@
+Atom.o : Atom.cpp Atom.h CpptrajStdio.h NameType.h
+Box.o : Box.cpp Box.h Constants.h CpptrajStdio.h Matrix_3x3.h Parallel.h Vec3.h
+CpptrajStdio.o : CpptrajStdio.cpp Parallel.h
+MaskToken.o : MaskToken.cpp ArgList.h Atom.h Box.h CpptrajStdio.h DistRoutines.h MaskToken.h Matrix_3x3.h NameType.h Parallel.h Residue.h StringRoutines.h Vec3.h
+NameType.o : NameType.cpp NameType.h
+Vec3.o : Vec3.cpp Constants.h CpptrajStdio.h Vec3.h
+AtomMask.o : AtomMask.cpp Atom.h AtomMask.h CpptrajStdio.h MaskToken.h NameType.h Residue.h
+CoordinateInfo.o : CoordinateInfo.cpp Box.h CoordinateInfo.h CpptrajStdio.h Matrix_3x3.h Parallel.h ReplicaDimArray.h Vec3.h
+Frame.o : Frame.cpp Atom.h AtomMask.h Box.h Constants.h CoordinateInfo.h CpptrajStdio.h Frame.h MaskToken.h Matrix_3x3.h NameType.h Parallel.h ReplicaDimArray.h Residue.h Vec3.h
+Matrix_3x3.o : Matrix_3x3.cpp Constants.h CpptrajStdio.h Matrix_3x3.h Vec3.h
+Residue.o : Residue.cpp NameType.h Residue.h
+main.o : main.cpp Action_Closest.h ArgList.h Atom.h AtomExtra.h AtomMask.h Box.h CharMask.h CoordinateInfo.h CpptrajFile.h DistRoutines.h FileIO.h FileName.h Frame.h ImagedAction.h MaskToken.h Matrix_3x3.h Molecule.h NameType.h NetcdfFile.h Parallel.h ParameterTypes.h Parm_Amber.h Range.h ReplicaDimArray.h Residue.h Topology.h Traj_AmberNetcdf.h Vec3.h
+ArgList.o : ArgList.cpp ArgList.h CpptrajStdio.h StringRoutines.h
+StringRoutines.o : StringRoutines.cpp CpptrajStdio.h StringRoutines.h
+DistRoutines.o : DistRoutines.cpp Box.h DistRoutines.h Matrix_3x3.h Parallel.h Vec3.h
+Topology.o : Topology.cpp Atom.h AtomExtra.h AtomMask.h Box.h CharMask.h Constants.h CoordinateInfo.h CpptrajStdio.h FileName.h Frame.h MaskToken.h Matrix_3x3.h Molecule.h NameType.h Parallel.h ParameterTypes.h Range.h ReplicaDimArray.h Residue.h StringRoutines.h Topology.h Vec3.h
+CharMask.o : CharMask.cpp Atom.h CharMask.h CpptrajStdio.h MaskToken.h NameType.h Residue.h
+FileName.o : FileName.cpp CpptrajStdio.h FileName.h
+Range.o : Range.cpp ArgList.h CpptrajStdio.h Range.h
+Action_Closest.o : Action_Closest.cpp Action_Closest.h ArgList.h Atom.h AtomExtra.h AtomMask.h Box.h CharMask.h CoordinateInfo.h CpptrajStdio.h DistRoutines.h FileName.h Frame.h ImagedAction.h MaskToken.h Matrix_3x3.h Molecule.h NameType.h Parallel.h ParameterTypes.h Range.h ReplicaDimArray.h Residue.h Topology.h Vec3.h
+Parm_Amber.o : Parm_Amber.cpp ArgList.h Atom.h AtomExtra.h AtomMask.h Box.h CharMask.h Constants.h CoordinateInfo.h CpptrajFile.h CpptrajStdio.h FileIO.h FileName.h Frame.h MaskToken.h Matrix_3x3.h Molecule.h NameType.h Parallel.h ParameterTypes.h Parm_Amber.h Range.h ReplicaDimArray.h Residue.h StringRoutines.h TextFormat.h Topology.h Vec3.h
+TextFormat.o : TextFormat.cpp StringRoutines.h TextFormat.h
+CpptrajFile.o : CpptrajFile.cpp CpptrajFile.h CpptrajStdio.h FileIO.h FileIO_Bzip2.h FileIO_Gzip.h FileIO_Mpi.h FileIO_Std.h FileName.h Parallel.h StringRoutines.h
+FileIO_Bzip2.o : FileIO_Bzip2.cpp CpptrajStdio.h FileIO.h FileIO_Bzip2.h
+FileIO_Gzip.o : FileIO_Gzip.cpp CpptrajStdio.h FileIO.h FileIO_Gzip.h
+FileIO_Std.o : FileIO_Std.cpp FileIO.h FileIO_Std.h
+NetcdfFile.o : NetcdfFile.cpp Box.h Constants.h CoordinateInfo.h CpptrajStdio.h Matrix_3x3.h NetcdfFile.h Parallel.h ReplicaDimArray.h Vec3.h Version.h
+Traj_AmberNetcdf.o : Traj_AmberNetcdf.cpp ArgList.h Atom.h AtomExtra.h AtomMask.h Box.h CharMask.h CoordinateInfo.h CpptrajFile.h CpptrajStdio.h FileIO.h FileName.h Frame.h MaskToken.h Matrix_3x3.h Molecule.h NameType.h NetcdfFile.h Parallel.h ParallelNetcdf.h ParameterTypes.h Range.h ReplicaDimArray.h Residue.h Topology.h Traj_AmberNetcdf.h Vec3.h
