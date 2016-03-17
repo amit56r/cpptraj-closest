@@ -14,7 +14,14 @@ class Action_Closest {
     RetType Init(ArgList&, int);
     RetType Setup(Topology const&, CoordinateInfo const&);
     RetType DoAction(int, Frame&);
+
+
   private:
+
+    //faster routines  -  pulling out divergent code
+    void Action_NoImage(Frame& frmIn,double maxD);
+    void Action_ImageOrtho(Frame& frmIn, double maxD);
+    void Action_ImageNonOrtho(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip);
 
     ImagedAction image_;    ///< Imaging routines.
     int closestWaters_;     ///< Closest # of molecules to keep.

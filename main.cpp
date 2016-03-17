@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
   for (int set = 0; set != Nframes; set++) {
     printf("Frame %i\n", set+1);
     if (trajFile.readFrame(set, frm)) break;
-    closest.DoAction(set, frm);
+    closest.DoAction(set, frm);  //new frame each time  -  maybe preloading then for gpu
   }
   trajFile.closeTraj();
   fprintf(stderr,"\nComplete.\n\n");

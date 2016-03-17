@@ -159,9 +159,8 @@ Action_Closest::RetType Action_Closest::Setup(Topology const& topIn, CoordinateI
 /** Find the minimum distance between atoms in distanceMask and each 
   * solvent Mask.
   */
-Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
-  int solventMol; 
-  double Dist, maxD;
+Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) { 
+  double maxD;
   Matrix_3x3 ucell, recip;
   AtomMask::const_iterator solute_atom;
   Iarray::const_iterator solvent_atom;
@@ -177,7 +176,42 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
     maxD = DBL_MAX;
   }
 
-  // Loop over all solvent molecules in original frame
+  //subroutines to find the distance
+  if (image_.ImageType() == NOIMAGE)
+    Action_NoImage(frmIn,maxD);
+  else if (image_.ImageType() == ORTHO)
+    Action_ImageOrtho(frmIn,maxD);
+  else
+    Action_ImageNonOrtho(frmIn,maxD, ucell,recip);
+
+
+
+  // Sort distances
+  std::sort( SolventMols_.begin(), SolventMols_.end(), moldist_cmp() );
+  // Add first closestWaters solvent atoms to stripMask
+  std::vector<MolDist>::iterator solventend = SolventMols_.begin() + closestWaters_;
+  for ( std::vector<MolDist>::const_iterator solvent = SolventMols_.begin();
+                                             solvent != solventend;
+                                           ++solvent ) 
+  {
+    solvent_atom = solvent->mask.begin();
+    mprintf("\tMol= %8i  Atom= %8i  Dist= %10.4f\n", solvent->mol,
+            *solvent_atom + 1, sqrt( solvent->D ));
+  }
+
+  return Action_Closest::OK;
+}
+
+
+
+
+void Action_Closest::Action_ImageNonOrtho(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip)
+{
+  double Dist;
+  int solventMol;
+  AtomMask::const_iterator solute_atom;
+  Iarray::const_iterator solvent_atom;
+    // Loop over all solvent molecules in original frame
   if (useMaskCenter_) {
     Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
     for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {
@@ -185,9 +219,9 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
       for (solvent_atom = SolventMols_[solventMol].solventAtoms.begin();
            solvent_atom != SolventMols_[solventMol].solventAtoms.end(); ++solvent_atom)
       {
-        Dist = DIST2( maskCenter.Dptr(),
-                      frmIn.XYZ(*solvent_atom), image_.ImageType(),
-                      frmIn.BoxCrd(), ucell, recip);
+
+        Dist = DIST2_ImageNonOrtho( maskCenter.Dptr(),
+                      frmIn.XYZ(*solvent_atom),ucell, recip);
         if (Dist < SolventMols_[solventMol].D) 
           SolventMols_[solventMol].D = Dist;
       }
@@ -206,9 +240,8 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
         for (solute_atom = distanceMask_.begin(); 
              solute_atom != distanceMask_.end(); ++solute_atom)
         {
-          Dist = DIST2(frmIn.XYZ(*solute_atom),
-                       frmIn.XYZ(*solvent_atom), image_.ImageType(), 
-                       frmIn.BoxCrd(), ucell, recip);
+          Dist = DIST2_ImageNonOrtho(frmIn.XYZ(*solute_atom),
+                       frmIn.XYZ(*solvent_atom), ucell, recip);
           if (Dist < SolventMols_[solventMol].D) 
             SolventMols_[solventMol].D = Dist;
           if (debug_ > 2)
@@ -221,18 +254,110 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
     } // END for loop over solventMol
   }
 
-  // Sort distances
-  std::sort( SolventMols_.begin(), SolventMols_.end(), moldist_cmp() );
-  // Add first closestWaters solvent atoms to stripMask
-  std::vector<MolDist>::iterator solventend = SolventMols_.begin() + closestWaters_;
-  for ( std::vector<MolDist>::const_iterator solvent = SolventMols_.begin();
-                                             solvent != solventend;
-                                           ++solvent ) 
-  {
-    solvent_atom = solvent->mask.begin();
-    mprintf("\tMol= %8i  Atom= %8i  Dist= %10.4f\n", solvent->mol,
-            *solvent_atom + 1, sqrt( solvent->D ));
+}
+
+void Action_Closest::Action_ImageOrtho(Frame& frmIn, double maxD)
+{
+  double Dist;
+  int solventMol;
+  AtomMask::const_iterator solute_atom;
+  Iarray::const_iterator solvent_atom;
+    // Loop over all solvent molecules in original frame
+  if (useMaskCenter_) {
+    Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
+    for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {
+      SolventMols_[solventMol].D = maxD;
+      for (solvent_atom = SolventMols_[solventMol].solventAtoms.begin();
+           solvent_atom != SolventMols_[solventMol].solventAtoms.end(); ++solvent_atom)
+      {
+
+        Dist = DIST2_ImageOrtho( maskCenter.Dptr(),
+                      frmIn.XYZ(*solvent_atom),frmIn.BoxCrd());
+        if (Dist < SolventMols_[solventMol].D) 
+          SolventMols_[solventMol].D = Dist;
+      }
+    }
+  } else {
+    for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {
+      if (debug_ > 1)
+        mprintf("DEBUG: Calculating distance for molecule %i\n", solventMol);
+      // Set the initial minimum distance for this solvent mol to be the
+      // max possible distance.
+      SolventMols_[solventMol].D = maxD;
+      // Calculate distance between each atom in distanceMask and atoms in solvent Mask
+      for (solvent_atom = SolventMols_[solventMol].solventAtoms.begin();
+           solvent_atom != SolventMols_[solventMol].solventAtoms.end(); ++solvent_atom)
+      {
+        for (solute_atom = distanceMask_.begin(); 
+             solute_atom != distanceMask_.end(); ++solute_atom)
+        {
+          Dist = DIST2_ImageOrtho(frmIn.XYZ(*solute_atom),
+                       frmIn.XYZ(*solvent_atom), frmIn.BoxCrd());
+          if (Dist < SolventMols_[solventMol].D) 
+            SolventMols_[solventMol].D = Dist;
+          if (debug_ > 2)
+            mprintf("DEBUG: SolvMol %i, soluteAtom %i, solventAtom %i, D= %f, minD= %f\n",
+                    solventMol, *solute_atom, *solvent_atom, Dist,
+                    sqrt(SolventMols_[solventMol].D));
+        }
+      }
+      if (debug_ > 1) mprintf("DEBUG:\tMol %8i minD= %lf\n",solventMol, SolventMols_[solventMol].D);
+    } // END for loop over solventMol
   }
 
-  return Action_Closest::OK;
 }
+
+
+//pulling out the dist control statement
+void Action_Closest::Action_NoImage(Frame& frmIn,double maxD)
+{
+  double Dist;
+  int solventMol;
+  AtomMask::const_iterator solute_atom;
+  Iarray::const_iterator solvent_atom;
+    // Loop over all solvent molecules in original frame
+  if (useMaskCenter_) {
+    Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
+    for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {
+      SolventMols_[solventMol].D = maxD;
+      for (solvent_atom = SolventMols_[solventMol].solventAtoms.begin();
+           solvent_atom != SolventMols_[solventMol].solventAtoms.end(); ++solvent_atom)
+      {
+
+        Dist = DIST2_NoImage( maskCenter.Dptr(),
+                      frmIn.XYZ(*solvent_atom));
+        if (Dist < SolventMols_[solventMol].D) 
+          SolventMols_[solventMol].D = Dist;
+      }
+    }
+  } else {
+    for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {
+      if (debug_ > 1)
+        mprintf("DEBUG: Calculating distance for molecule %i\n", solventMol);
+      // Set the initial minimum distance for this solvent mol to be the
+      // max possible distance.
+      SolventMols_[solventMol].D = maxD;
+      // Calculate distance between each atom in distanceMask and atoms in solvent Mask
+      for (solvent_atom = SolventMols_[solventMol].solventAtoms.begin();
+           solvent_atom != SolventMols_[solventMol].solventAtoms.end(); ++solvent_atom)
+      {
+        for (solute_atom = distanceMask_.begin(); 
+             solute_atom != distanceMask_.end(); ++solute_atom)
+        {
+          Dist = DIST2_NoImage(frmIn.XYZ(*solute_atom),
+                       frmIn.XYZ(*solvent_atom));
+          if (Dist < SolventMols_[solventMol].D) 
+            SolventMols_[solventMol].D = Dist;
+          if (debug_ > 2)
+            mprintf("DEBUG: SolvMol %i, soluteAtom %i, solventAtom %i, D= %f, minD= %f\n",
+                    solventMol, *solute_atom, *solvent_atom, Dist,
+                    sqrt(SolventMols_[solventMol].D));
+        }
+      }
+      if (debug_ > 1) mprintf("DEBUG:\tMol %8i minD= %lf\n",solventMol, SolventMols_[solventMol].D);
+    } // END for loop over solventMol
+  }
+
+}
+
+
