@@ -1,7 +1,7 @@
 # Configuration file for closest
-CXX=g++
+CXX=g++ -pg
 
-CXXFLAGS=
+CXXFLAGS= -O3
 
 LDFLAGS=-lnetcdf 
 

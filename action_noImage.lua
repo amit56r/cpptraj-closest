@@ -1,4 +1,4 @@
-init("action_noImage.cpp","Action_Closest::Action_NoImage_Center",0)
+init("simple_action_noImage.cpp","Action_NoImage_Center",0)
 dofile("cudaize.lua") --defines custom tile_by_index, copy_to_registers,
                       --copy_to_shared methods
 
