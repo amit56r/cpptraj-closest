@@ -17,7 +17,7 @@ struct MolDist {
 
 //using dist for no image 
 // and kernel for when we use solute molecule center
-  void Action_NoImage_Center(MolDist SolventMols_[NsolventMolecules_],double maskCenter[3] ,double maxD)
+  void Action_NoImage_Center(struct MolDist SolventMols_[NsolventMolecules_],double maskCenter[3] ,double maxD)
   {
   	double Dist;
   	int solventMol, solvent_atom;
