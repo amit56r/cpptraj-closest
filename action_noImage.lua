@@ -1,8 +1,6 @@
 init("simple_action_noImage.c","Action_NoImage_Center",0)
 dofile("cudaize.lua") --defines custom tile_by_index, copy_to_registers,
                       --copy_to_shared methods
-
-N=129
 TI=32
 TJ=64
 
@@ -14,7 +12,7 @@ N=1024
 --tile, "k" for the control loop fo the "j" tile, with the final order
 --of {"ii", "k", "i", "j"}
 --tile_by_index({"i","j"}, {TI,TJ}, {l1_control="ii", l2_control="k"}, {"ii", "k", "i", "j"})
-tile_by_index(0,{"solventMol","solvent_atom"}, {TI,TJ}, {l1_control="ii", l2_control="jj"}, {"ii", "jj", "solventMol", "solvent_atom"})
+--tile_by_index(0,{"solventMol","solvent_atom"}, {TI,TJ}, {l1_control="ii", l2_control="jj"}, {"ii", "jj", "solventMol", "solvent_atom"})
 --tile_by_index({"i"}, {TI}, {l1_control="iii"}, {"ii", "k", "iii","i", "j"})
 --tile_by_index({"j"}, {TI}, {l2_control="k"}, { "k", "i", "j"})
 --tile_by_index({"i"}, {TI}, {l1_control="ii"}, {"ii", "i", "j"})
@@ -25,14 +23,14 @@ tile_by_index(0,{"solventMol","solvent_atom"}, {TI,TJ}, {l1_control="ii", l2_con
 --levels.
 --normalize_index("ii")
 --normalize_index(0,"i")
-print_code(1)
+--print_code(1)
 
 --Cudaize now determines the grid dimentions from the loops themselves
 --(the upper bounds of the block and thread loops). It also renames the
 --given block and thread loops's indexes to the approviate values from
 --the set {"bx","by","tx","ty","tz"}. The second parameter specifies the
 --size of the arrays to be copied in the CUDA scaffolding.
-cudaize(0,"Action_No_image_GPU", {SolventMols_=N},{block={"ii"}, thread={"solventMol"}},{})
+cudaize(0,"Action_No_image_GPU", {SolventMols_=N*N*3,D_=N*3},{block={solventMol}, thread={solvent_atom}},{})
 
 --print_code()
 
@@ -50,4 +48,4 @@ cudaize(0,"Action_No_image_GPU", {SolventMols_=N},{block={"ii"}, thread={"solven
 --copy_to_texture("b")
 --print_code()
 --unroll(0,5,0)
---print_code()
+print_code(1)
