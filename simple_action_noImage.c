@@ -17,7 +17,9 @@ struct MolDist {
 
 //using dist for no image 
 // and kernel for when we use solute molecule center
-  void Action_NoImage_Center(struct MolDist SolventMols_[NsolventMolecules_],double maskCenter[3] ,double maxD)
+//extracting pulling out arrays out from struct 
+  //void Action_NoImage_Center(struct MolDist SolventMols_[NsolventMolecules_],double maskCenter[3] ,double maxD)
+  void Action_NoImage_Center(double SolventMols_[NsolventMolecules_][NsolventAtoms_][3], double maskCenter[3] ,double maxD)
   {
   	double Dist;
   	int solventMol, solvent_atom;
@@ -32,7 +34,7 @@ struct MolDist {
 			//double *a2 = frmIn.XYZ(*solvent_atom);
 
 			double *a1 = maskCenter; //center of solute molecule
-			double *a2 = SolventMols_[solventMol].solventAtoms[solvent_atom];  
+			double *a2 = SolventMols_[solventMol][solvent_atom];  
 
 			double x = a1[0] - a2[0];
 			double y = a1[1] - a2[1];
