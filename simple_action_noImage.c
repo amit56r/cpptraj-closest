@@ -18,15 +18,15 @@ struct MolDist {
 //using dist for no image 
 // and kernel for when we use solute molecule center
 //extracting pulling out arrays out from struct 
-  //void Action_NoImage_Center(struct MolDist SolventMols_[NsolventMolecules_],double maskCenter[3] ,double maxD)
-  void Action_NoImage_Center(double SolventMols_[NsolventMolecules_][NsolventAtoms_][3], double maskCenter[3] ,double maxD)
+  void Action_NoImage_Center(double SolventMols_[NsolventMolecules_][NsolventAtoms_][3],
+  				 double D_[NsolventMolecules_], double maskCenter[3] ,double maxD)
   {
   	double Dist;
   	int solventMol, solvent_atom;
 
   	//Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
 	for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {  //standard loop 
-		SolventMols_[solventMol].D = maxD;
+		D_[solventMol] = maxD;
 		for (solvent_atom = 0; solvent_atom < NsolventAtoms_; solvent_atom++)
 		{
 			//main dist2_noImage code
@@ -42,8 +42,8 @@ struct MolDist {
 
 			Dist = (x*x + y*y + z*z);
 
-			if (Dist < SolventMols_[solventMol].D) 
-				SolventMols_[solventMol].D = Dist;
+			if (Dist < D_[solventMol]) 
+				D_[solventMol] = Dist;
 		}
 	}
 
