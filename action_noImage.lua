@@ -34,7 +34,7 @@ cudaize(0,"Action_No_image_GPU", {SolventMols_=N*N*3,D_=N*3},{block={solventMol}
 
 --print_code()
 
---Does a datacopy, tile, and add_sync to get a shared memory copy
+--Does a datacopy, tile, and add_sync to get a shared memory copys
 
 --copy_to_shared("tx", "b", 1)
 --copy_to_shared("tx", "c", -16)
