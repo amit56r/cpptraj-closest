@@ -12,7 +12,10 @@ N=1024
 --tile, "k" for the control loop fo the "j" tile, with the final order
 --of {"ii", "k", "i", "j"}
 --tile_by_index({"i","j"}, {TI,TJ}, {l1_control="ii", l2_control="k"}, {"ii", "k", "i", "j"})
---tile_by_index(0,{"solventMol","solvent_atom"}, {TI,TJ}, {l1_control="ii", l2_control="jj"}, {"ii", "jj", "solventMol", "solvent_atom"})
+--distribute({0,1}, 2)
+print_code(0)
+tile_by_index(1,{"solventMol","solventAtom"}, {TI,TJ}, {l1_control="ii", l2_control="jj"}, {"ii", "jj", "solventMol", "solventAtom"})
+print_code(0)
 --tile_by_index({"i"}, {TI}, {l1_control="iii"}, {"ii", "k", "iii","i", "j"})
 --tile_by_index({"j"}, {TI}, {l2_control="k"}, { "k", "i", "j"})
 --tile_by_index({"i"}, {TI}, {l1_control="ii"}, {"ii", "i", "j"})
@@ -30,7 +33,10 @@ N=1024
 --given block and thread loops's indexes to the approviate values from
 --the set {"bx","by","tx","ty","tz"}. The second parameter specifies the
 --size of the arrays to be copied in the CUDA scaffolding.
-cudaize(0,"Action_No_image_GPU", {SolventMols_=N*N*3,D_=N*3},{block={solventMol}, thread={solvent_atom}},{})
+--print_code(0)
+cudaize(1,"Action_No_image_GPU", {D_=N*3, SolventMols_=N*N*3},{block={ii,jj}, thread={solventMol, solventAtom}},{})
+distribute({0,1}, 2)
+print_code(0)
 
 --print_code()
 

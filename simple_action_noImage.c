@@ -1,5 +1,4 @@
 
-
 //this is only  used for cuda-chill
 //heavy simplification
 
@@ -22,7 +21,7 @@
   				 double D_[NsolventMolecules_], double maskCenter[3] ,double maxD)
   {
   	double Dist;
-  	int solventMol, solvent_atom;
+  	int solventMol, solventAtom;
 
   	//Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
 	for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {  //standard loop 
@@ -34,17 +33,25 @@
 			//double *a2 = frmIn.XYZ(*solvent_atom);
 
 			double *a1 = maskCenter; //center of solute molecule
-			double *a2 = SolventMols_[solventMol][solventAtom];  
+			//double *a2 = SolventMols_[solventMol][solventAtom];  
 
-			double x = a1[0] - a2[0];
-			double y = a1[1] - a2[1];
-			double z = a1[2] - a2[2];
+			//double x = a1[0] - a2[0];
+			//double y = a1[1] - a2[1];
+			//double z = a1[2] - a2[2];
 
-			Dist = (x*x + y*y + z*z);
+			//Dist = (x*x + y*y + z*z);
+			Dist  = (SolventMols_[solventMol][solventAtom][0] * SolventMols_[solventMol][solventAtom][0]) +
+				(SolventMols_[solventMol][solventAtom][1] * SolventMols_[solventMol][solventAtom][1]) +
+   				(SolventMols_[solventMol][solventAtom][2] *SolventMols_[solventMol][solventAtom][2]);
 
-			if (Dist < D_[solventMol]) 
-				D_[solventMol] = Dist;
+			D_[solventMol] = Dist < D_[solventMol] ?  Dist : D_[solventMol];
+			//if (Dist < D_[solventMol]) 
+			//	D_[solventMol] = Dist;
+
 		}
 	}
 
 }
+
+
+
