@@ -13,16 +13,16 @@ N=1024
 --of {"ii", "k", "i", "j"}
 --tile_by_index({"i","j"}, {TI,TJ}, {l1_control="ii", l2_control="k"}, {"ii", "k", "i", "j"})
 --distribute({0,1}, 2)
-print_code(0)
+--print_code(0)
 --tile_by_index(0,{"solventMol"}, {TI}, {l1_control="ii"}, {"ii","solventMol"})
-distribute({0,1}, 1)
-print_code(0)
+--distribute({0,1}, 1)
+--print_code(0)
 --tile_by_index(0,{"solventMol"}, {TI}, {l1_control="ii"}, {"ii","solventMol"})
 --print_code(0)
 --tile_by_index(0,{"solventMol","solventAtom"}, {TI,TJ}, {l1_control="ii", l2_control="jj"}, {"ii","jj","solventMol","solventAtom"})
 --tile_by_index(0,{"solventMol"}, {TI}, {l1_control="ii"}, {"ii","solventMol"})
 --tile_by_index(1,{"solventAtom"}, {TI, TJ}, {l1_control="jj"}, {"ii", "solventMol","jj", "solventAtom"})
-print_code(0)
+--print_code(0)
 
 --fuse({0,1},1)
 --fuse({0,1}, 2)
@@ -52,8 +52,12 @@ print_code(0)
 --distribute({0,1,2}, 3)
 --cudaize(2,"Action_No_image_GPU", {D_=N*3, SolventMols_=N*N*3,maskCenter=3},{block={"ii", "jj"}, thread={"solventMol", "solventAtom"}},{})
 
+print_code(0)
 
-cudaize(1,"Action_noImage_GPU", {SolventMols_= N, maskCenter=3}, {block={"solventMol"}, thread={"solventAtom"}},{})
+distribute({0,1,2},2)
+
+print_code(0)
+cudaize(1,"Action_noImage_GPU", {SolventMols_= N*N*3,D_ = N*3, maskCenter=3,maxD=1}, {block={"solventMol"}, thread={"solventAtom"}},{maxD})
 print_code(0)
 
 --fuse({0,1},3)

@@ -42,7 +42,7 @@
 			//Dist = (x*x + y*y + z*z);
 			Dist  = (maskCenter[0] * SolventMols_[solventMol][solventAtom][0]) +
 				(maskCenter[1] * SolventMols_[solventMol][solventAtom][1]) +
-   				(maskCenter[2] *SolventMols_[solventMol][solventAtom][2]);
+   				(maskCenter[2] * SolventMols_[solventMol][solventAtom][2]);
 
 			//D_[solventMol] = Dist < D_[solventMol] ?  Dist : D_[solventMol];
 			if (Dist < D_[solventMol]) 
