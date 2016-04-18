@@ -7,25 +7,25 @@
 #define NsolventAtoms_ 1024
 
 
-struct MolDist {
-      int mol;        ///< Original solvent molecule number (starts from 1).
-      double D;       ///< Closest distance of solvent molecule to atoms in distanceMask.
-      //AtomMask mask;  ///< Original topology solvent molecule atom mask.
-      double solventAtoms[NsolventAtoms_][3]; ///< Actual solvent atom #s to loop over.
-  };
+// struct MolDist {
+//       int mol;        ///< Original solvent molecule number (starts from 1).
+//       double D;       ///< Closest distance of solvent molecule to atoms in distanceMask.
+//       //AtomMask mask;  ///< Original topology solvent molecule atom mask.
+//       double solventAtoms[NsolventAtoms_][3]; ///< Actual solvent atom #s to loop over.
+//   };
 
 //using dist for no image 
 // and kernel for when we use solute molecule center
 //extracting pulling out arrays out from struct 
-  void Action_NoImage_Center(struct MolDist SolventMols_[NsolventMolecules_]
-  							, double maskCenter[3] ,double maxD)
+  void Action_NoImage_Center(double SolventMols_[NsolventMolecules_][NsolventAtoms_][3],
+  				 double D_[NsolventMolecules_], double maskCenter[3] ,double maxD)
   {
   	double Dist;
   	int solventMol, solventAtom;
 
   	//Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
 	for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {  //standard loop 
-		SolventMols_[solventMol].D = maxD;
+		D_[solventMol] = maxD;
 		for (solventAtom = 0; solventAtom < NsolventAtoms_; solventAtom++)
 		{
 			//main dist2_noImage code
@@ -40,13 +40,13 @@ struct MolDist {
 			//double z = a1[2] - a2[2];
 
 			//Dist = (x*x + y*y + z*z);
-			Dist  = (maskCenter[0] * SolventMols_[solventMol].solventAtoms[solventAtom][0]) +
-				(maskCenter[1] * SolventMols_[solventMol].solventAtoms[solventAtom][1]) +
-   				(maskCenter[2] * SolventMols_[solventMol].solventAtoms[solventAtom][2]);
+			Dist  = (maskCenter[0] * SolventMols_[solventMol][solventAtom][0]) +
+				(maskCenter[1] * SolventMols_[solventMol][solventAtom][1]) +
+   				(maskCenter[2] *SolventMols_[solventMol][solventAtom][2]);
 
 			//D_[solventMol] = Dist < D_[solventMol] ?  Dist : D_[solventMol];
-			if (Dist < SolventMols_[solventMol].D)  
-				SolventMols_[solventMol].D  = Dist;
+			if (Dist < D_[solventMol]) 
+				D_[solventMol] = Dist;
 
 		}
 	}
