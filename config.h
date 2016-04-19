@@ -1,5 +1,5 @@
 # Configuration file for closest
-CXX=nvcc
+CXX=nvcc -I .
 
 CXXFLAGS=-O3
 

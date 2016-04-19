@@ -187,7 +187,9 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
 //remove this ..TODO
 
 Action_NoImage(frmIn,maxD);
-  
+
+
+int type = 0;
 cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled()); //handling all the data formatting and copying etc
 // we will only care about kernel time
 //fixing the overhead will be later

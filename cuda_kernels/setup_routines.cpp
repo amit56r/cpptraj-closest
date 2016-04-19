@@ -23,15 +23,15 @@ void Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Ma
 	//allocate space and rewrite 
 	int NMols = SolventMols_.size();
 	int NAtoms = SolventMols_[0].solventAtoms.size();  //guaranteed to same size  -  due to setup  
-	int Nlinear_Solvent = 3 * NMols *  NAtoms
-	double *linear_Solvent = new double[Nlinear_Solvent]
-	double *D_ = new double[NMols]
+	int Nlinear_Solvent = 3 * NMols *  NAtoms;
+	double *linear_Solvent = new double[Nlinear_Solvent];
+	double *D_ = new double[NMols];
 
 	//write in 
 	for(int sMol =0; sMol  < NMols; sMol++){
-		for(int sAtom = 0, sAtom < NAtoms; sAtom++){
-			index =  (sAtom * 3 ) + (sMol * 3 * NAtoms);
-			double *a = frmIn.XYZ(SolventMols[sMol].solventAtoms[sAtom]);
+		for(int sAtom = 0; sAtom < NAtoms; sAtom++){
+			int index =  (sAtom * 3 ) + (sMol * 3 * NAtoms);
+			const double *a = frmIn.XYZ(SolventMols_[sMol].solventAtoms[sAtom]);
 
 			linear_Solvent[index + 0] = a[0];
 			linear_Solvent[index + 1] = a[1];
@@ -55,7 +55,7 @@ void Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Ma
 
 	//copying back the D__ into the right place
 	for(int sMol = 0; sMol < NMols; sMol++){
-		SolventMols[sMol].D = D_[sMol];
+		SolventMols_[sMol].D = D_[sMol];
 	}
 
 
