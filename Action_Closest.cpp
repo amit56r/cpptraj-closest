@@ -177,13 +177,18 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
   }
 
   //subroutines to find the distance
-  if (image_.ImageType() == NOIMAGE)
-    Action_NoImage(frmIn,maxD);
-  else if (image_.ImageType() == ORTHO)
-    Action_ImageOrtho(frmIn,maxD);
-  else
-    Action_ImageNonOrtho(frmIn,maxD, ucell,recip);
+  // if (image_.ImageType() == NOIMAGE)
+  //   Action_NoImage(frmIn,maxD);
+  // else if (image_.ImageType() == ORTHO)
+  //   Action_ImageOrtho(frmIn,maxD);
+  // else
+  //   Action_ImageNonOrtho(frmIn,maxD, ucell,recip);
 
+//remove this ..TODO
+
+
+  
+Action_NoImage(frmIn,maxD);
 
 
   // Sort distances

@@ -57,7 +57,7 @@ print_code(0)
 distribute({0,1,2},2)
 
 print_code(0)
-cudaize(1,"Action_noImage_GPU", {SolventMols_= N*N*3,D_ = N*3, maskCenter=3,maxD=1}, {block={"solventMol"}, thread={"solventAtom"}},{maxD})
+cudaize(1,"Action_noImage_GPU", {SolventMols_= N*N*3,D_ = N, maskCenter=3,maxD=1}, {block={"solventMol"}, thread={"solventAtom"}},{maxD})
 print_code(0)
 
 --fuse({0,1},3)

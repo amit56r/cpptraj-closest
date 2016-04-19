@@ -26,7 +26,7 @@ void Action_NoImage_Center(double SolventMols_[1024][1024][3],double D_[1024],do
   double Dist;
   int solventMol;
   int solventAtom;
-  cudaMalloc(((void **)(&devO1Ptr)),3072 * sizeof(double ));
+  cudaMalloc(((void **)(&devO1Ptr)),1024 * sizeof(double ));
   cudaMalloc(((void **)(&devI1Ptr)),3 * sizeof(double ));
   cudaMemcpy(devI1Ptr,maskCenter,3 * sizeof(double ),cudaMemcpyHostToDevice);
   cudaMalloc(((void **)(&devI2Ptr)),3145728 * sizeof(double ));
@@ -34,7 +34,7 @@ void Action_NoImage_Center(double SolventMols_[1024][1024][3],double D_[1024],do
   dim3 dimGrid0 = dim3(1024,1);
   dim3 dimBlock0 = dim3(1024,1);
   Action_noImage_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr,((double (*)[1024][3])devI2Ptr));
-  cudaMemcpy(D_,devO1Ptr,3072 * sizeof(double ),cudaMemcpyDeviceToHost);
+  cudaMemcpy(D_,devO1Ptr,1024 * sizeof(double ),cudaMemcpyDeviceToHost);
   cudaFree(devO1Ptr);
   cudaFree(devI1Ptr);
   cudaFree(devI2Ptr);
