@@ -186,9 +186,11 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
 
 //remove this ..TODO
 
-
-  
 Action_NoImage(frmIn,maxD);
+  
+cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled()); //handling all the data formatting and copying etc
+// we will only care about kernel time
+//fixing the overhead will be later
 
 
   // Sort distances
@@ -218,7 +220,7 @@ void Action_Closest::Action_ImageNonOrtho(Frame& frmIn, double maxD, Matrix_3x3 
   Iarray::const_iterator solvent_atom;
     // Loop over all solvent molecules in original frame
   if (useMaskCenter_) {
-    Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ );
+    Vec3 maskCenter = frmIn.VGeometricCenter( distanceMask_ ); //can be calculated outside
     for (solventMol=0; solventMol < NsolventMolecules_; solventMol++) {
       SolventMols_[solventMol].D = maxD;
       for (solvent_atom = SolventMols_[solventMol].solventAtoms.begin();
@@ -226,7 +228,7 @@ void Action_Closest::Action_ImageNonOrtho(Frame& frmIn, double maxD, Matrix_3x3 
       {
 
         Dist = DIST2_ImageNonOrtho( maskCenter.Dptr(),
-                      frmIn.XYZ(*solvent_atom),ucell, recip);
+                      frmIn.XYZ(*solvent_atom),ucell, recip);  //frame translation can be done inside gpu
         if (Dist < SolventMols_[solventMol].D) 
           SolventMols_[solventMol].D = Dist;
       }

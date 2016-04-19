@@ -1,5 +1,5 @@
 # Configuration file for closest
-CXX=g++
+CXX=nvcc
 
 CXXFLAGS=-O3
 

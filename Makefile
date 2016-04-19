@@ -14,7 +14,17 @@ SOURCES=Atom.cpp Box.cpp CpptrajStdio.cpp MaskToken.cpp NameType.cpp Vec3.cpp \
         main.cpp ArgList.cpp StringRoutines.cpp DistRoutines.cpp Topology.cpp \
         CharMask.cpp FileName.cpp Range.cpp Action_Closest.cpp \
         Parm_Amber.cpp TextFormat.cpp CpptrajFile.cpp FileIO_Bzip2.cpp \
-        FileIO_Gzip.cpp FileIO_Std.cpp NetcdfFile.cpp Traj_AmberNetcdf.cpp
+        FileIO_Gzip.cpp FileIO_Std.cpp NetcdfFile.cpp Traj_AmberNetcdf.cpp \
+        cuda_kernels/core_kernels.cu \
+        cuda_kernels/kernel_wrappers.cu \
+        cuda_kernels/setup_routines.cpp 
+
+
+
+
+
+
+
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
