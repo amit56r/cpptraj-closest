@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 
 
 
@@ -18,4 +18,7 @@ __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *Solvent
   Dist = maskCenter[0] * SolventMols_[sIndex + 0] + maskCenter[1] * SolventMols_[sIndex + 1] + maskCenter[2] * SolventMols_[sIndex + 2];
   if (Dist  < D_[bx]) 
     D_[bx] = Dist;
+
+  if(tx == 0 && bx == 0 )
+	printf("end of kernel");
 }

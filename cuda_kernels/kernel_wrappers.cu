@@ -25,8 +25,8 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   cudaMemcpy(devI1Ptr,maskCenter,3 * sizeof(double ),cudaMemcpyHostToDevice);
   cudaMalloc(((void **)(&devI2Ptr)),NMols * NAtoms * 3 * sizeof(double ));
   cudaMemcpy(devI2Ptr,SolventMols_,NMols * NAtoms * 3 * sizeof(double ),cudaMemcpyHostToDevice);
-  dim3 dimGrid0 = dim3(1024,1);
-  dim3 dimBlock0 = dim3(1024,1);
+  dim3 dimGrid0 = dim3(NMols,1);
+  dim3 dimBlock0 = dim3(NAtoms,1);
 
 
   printf("About to launch kernel.\n");
