@@ -3,7 +3,7 @@
 
 #include "Action_Closest.h"
 #include <cfloat> // DBL_MAX
-
+#include <cstdio>
 
 
 //kernel_wrapper defs
@@ -56,7 +56,7 @@ void Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Ma
 	//copying back the D__ into the right place
 	for(int sMol = 0; sMol < NMols; sMol++){
 		SolventMols_[sMol].D = D_[sMol];
-		printf('lhs = %f ; rhs = %f ',SolventMols_[sMol].D,D_[sMol]);
+		printf("lhs = %f ; rhs = %f ",SolventMols_[sMol].D,D_[sMol]);
 	}
 
 	delete linear_Solvent;
