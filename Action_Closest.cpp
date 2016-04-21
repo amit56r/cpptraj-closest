@@ -3,6 +3,7 @@
 #include <cfloat> // DBL_MAX
 #include "Action_Closest.h"
 #include "CpptrajStdio.h"
+#include <cstdio>
 
 // CONSTRUCTOR
 Action_Closest::Action_Closest() :
@@ -185,14 +186,39 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
   //   Action_ImageNonOrtho(frmIn,maxD, ucell,recip);
 
 //remove this ..TODO
+cudaEvent_t start_event, stop_event;
+float elapsed_time_seq;
+cudaEventCreate(&start_event);
+cudaEventCreate(&stop_event);
+cudaEventRecord(start_event, 0);
 
+//serial section of the code 
 Action_NoImage(frmIn,maxD);
+
+cudaThreadSynchronize();
+cudaEventRecord(stop_event, 0);
+cudaEventSynchronize(stop_event);
+cudaEventElapsedTime(&elapsed_time_seq,start_event, stop_event );
+printf("Done with kernel SEQ Kernel Time: %.2f\n", elapsed_time_seq);
 
 
 int type = 0;
-cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled()); //handling all the data formatting and copying etc
+bool result;
+float elapsed_time_gpu;
+result = cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled(),elapsed_time_gpu); //handling all the data formatting and copying etc
 // we will only care about kernel time
 //fixing the overhead will be later
+
+  if(result){
+    printf("CUDA PASS");
+  }
+  else{
+    printf("CUDA FAIL!");
+  }
+
+  printf("Seq Time:  = %0.2f\n", elapsed_time_seq);
+  printf("CUDA Time: = %0.2f\n", elapsed_time_gpu);
+  printf("Speedup =  %0.2f\n", elapsed_time_gpu/elapsed_time_seq);
 
 
   // Sort distances

@@ -7,7 +7,7 @@
 
 
 //kernel_wrapper defs
-void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols,int NAtoms);
+void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols,int NAtoms, float &time_gpu);
 
 ///////////////////////////
 
@@ -15,7 +15,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
 // - pull out corrdinate by frame 
 // - rewrite data 
 // - gpu is only responsible for finding distance and doing the MIN reduction operator
-void Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip,int type, bool imaginEnabed)
+bool Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip,int type, bool imaginEnabed, float &time_gpu)
 {
 	Vec3 maskCenter_holder =  frmIn.VGeometricCenter( distanceMask_ );
 	double* maskCenter = maskCenter_holder.Dptr();
@@ -46,7 +46,7 @@ void Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Ma
 	//need to handle cases as well 
 	//TODO
 
-	Action_NoImage_Center(linear_Solvent, D_, maskCenter, maxD, NMols, NAtoms);
+	Action_NoImage_Center(linear_Solvent, D_, maskCenter, maxD, NMols, NAtoms,time_gpu);
 
 
 	//
@@ -54,15 +54,19 @@ void Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Ma
 
 
 	//copying back the D__ into the right place
+	bool flag = true;
 	for(int sMol = 0; sMol < NMols; sMol++){
-		SolventMols_[sMol].D = D_[sMol];
-		printf("lhs = %f ; rhs = %f ",SolventMols_[sMol].D,D_[sMol]);
+		if(SolventMols_[sMol].D != D_[sMol])
+		{
+			flag = false;
+		}
+		//printf("lhs = %f ; rhs = %f ",SolventMols_[sMol].D,D_[sMol]);
 	}
 
 	delete linear_Solvent;
 	delete D_;
 
-
+	return flag;
 	//done
 
 

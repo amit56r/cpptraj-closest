@@ -23,7 +23,7 @@ class Action_Closest {
     void Action_ImageOrtho(Frame& frmIn, double maxD);
     void Action_ImageNonOrtho(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip);
 
-    void cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip,int type, bool imaginEnabed);
+    bool cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Matrix_3x3 recip,int type, bool imaginEnabed, float &time_gpu);
 
     ImagedAction image_;    ///< Imaging routines.
     int closestWaters_;     ///< Closest # of molecules to keep.

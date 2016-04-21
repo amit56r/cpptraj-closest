@@ -20,7 +20,10 @@ __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *Solvent
 
   int sIndex =  bx*NAtoms*3 + tx*3;
 
-  Dist = maskCenter[0] * SolventMols_[sIndex + 0] + maskCenter[1] * SolventMols_[sIndex + 1] + maskCenter[2] * SolventMols_[sIndex + 2];
+  double x =  maskCenter[0] * SolventMols_[sIndex + 0];
+  double y = maskCenter[1] * SolventMols_[sIndex + 1];
+  double z =  maskCenter[2] * SolventMols_[sIndex + 2];
+  Dist = x*x  y*y + z*z;
   if (Dist  < D_[bx]) 
     D_[bx] = Dist;
 
