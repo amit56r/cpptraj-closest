@@ -4,6 +4,8 @@
 #include "Action_Closest.h"
 #include "CpptrajStdio.h"
 #include <cstdio>
+#include <cuda_runtime_api.h>
+#include <cuda.h>
 
 // CONSTRUCTOR
 Action_Closest::Action_Closest() :
