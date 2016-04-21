@@ -210,7 +210,7 @@ printf("Done with kernel SEQ Kernel Time: %.2f\n", elapsed_time_seq);
 int type = 0;
 bool result = true;
 float elapsed_time_gpu;
-result = cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled(),elapsed_time_gpu); //handling all the data formatting and copying etc
+result = cuda_action_center(frmIn,maxD,ucell ,recip ,type ,elapsed_time_gpu); //handling all the data formatting and copying etc
 // we will only care about kernel time
 //fixing the overhead will be later
 
@@ -219,6 +219,7 @@ result = cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled(),elaps
   }
   else{
     printf("CUDA FAIL!\n");
+    exit(0);
   }
 
   printf("Seq Time:  = %0.2f\n", elapsed_time_seq);

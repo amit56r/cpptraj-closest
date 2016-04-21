@@ -1,10 +1,11 @@
 
 #include <cstdio>
+#include <cmath>
 
-
+#define BLOCKDIM 1024
 
 // device kernel def
-__global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, int Nmols , int NAtoms);
+__global__ void Action_noImage_center_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, int Nmols , int NAtoms, int active_size);
 
 ////////////////////////
 
@@ -37,8 +38,22 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   cudaMemcpy(devI2Ptr,SolventMols_,NMols * NAtoms * 3 * sizeof(double ),cudaMemcpyHostToDevice);
 
 
-  dim3 dimGrid0 = dim3(NMols,1);
-  dim3 dimBlock0 = dim3(NAtoms,1);
+
+  //figue out the decomposition here
+  //we need to pad as well
+
+  //figure out how many active thread in a block
+  int active_size  =  BLOCKDIM/NAtoms * NAtoms;
+  int NBlocks =  ceil(NMols * NAtoms / float(active_size));
+  // printf("Nmols = %d; Natoms = %d\n", NMols, NAtoms);
+  // printf("active_size =  %d\n", active_size);
+  // printf("NBlocks =  %d\n", NBlocks);
+  // exit(0);
+
+
+
+  dim3 dimGrid0 = dim3(NBlocks,1);
+  dim3 dimBlock0 = dim3(BLOCKDIM,1);
 
 
   printf("NMols =  %d, NAtoms = %d\n", NMols, NAtoms); 
@@ -49,7 +64,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   cudaEventCreate(&stop_event);
   cudaEventRecord(start_event, 0);
 
-  Action_noImage_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD, NMols, NAtoms);
+  Action_noImage_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD, NMols, NAtoms,active_size);
   
   cudaThreadSynchronize();
   cudaEventRecord(stop_event, 0);
