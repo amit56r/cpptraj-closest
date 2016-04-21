@@ -4,7 +4,8 @@
 #include "Action_Closest.h"
 #include <cfloat> // DBL_MAX
 #include <cstdio>
-
+#include <cmath>
+#define TOL 1e-7
 
 //kernel_wrapper defs
 void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols,int NAtoms, float &time_gpu);
@@ -56,9 +57,11 @@ bool Action_Closest::cuda_action(Frame& frmIn, double maxD, Matrix_3x3 ucell, Ma
 	//copying back the D__ into the right place
 	bool flag = true;
 	for(int sMol = 0; sMol < NMols; sMol++){
-		if(SolventMols_[sMol].D != D_[sMol])
+		if(fabs(SolventMols_[sMol].D - D_[sMol]) > TOL)
 		{
 			flag = false;
+			printf("ACTUAL = %f ; GPU = %f; Where = %d/%d \n",SolventMols_[sMol].D,D_[sMol], sMol+1, NMols);
+			break;
 		}
 		//printf("lhs = %f ; rhs = %f ",SolventMols_[sMol].D,D_[sMol]);
 	}

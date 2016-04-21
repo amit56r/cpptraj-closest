@@ -10,8 +10,6 @@ __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *Solvent
   int tx;
   tx = threadIdx.x;
   double Dist;
-  int t2;
-  int t4;
 
   if(tx == 0 && bx == 0)
   	D_[bx] = maxD;
@@ -24,6 +22,7 @@ __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *Solvent
   double y = maskCenter[1] - SolventMols_[sIndex + 1];
   double z =  maskCenter[2] - SolventMols_[sIndex + 2];
   Dist = x*x + y*y + z*z;
+	//printf(" dist  =  %f\n", Dist);
   if (Dist  < D_[bx]) 
     D_[bx] = Dist;
 

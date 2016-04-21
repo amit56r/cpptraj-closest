@@ -187,7 +187,10 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
   // else
   //   Action_ImageNonOrtho(frmIn,maxD, ucell,recip);
 
-//remove this ..TODO
+//remove this ..TODOi
+
+useMaskCenter_ = true;
+
 cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
 cudaEventCreate(&start_event);
@@ -363,7 +366,8 @@ void Action_Closest::Action_NoImage(Frame& frmIn,double maxD)
 
         Dist = DIST2_NoImage( maskCenter.Dptr(),
                       frmIn.XYZ(*solvent_atom));
-        if (Dist < SolventMols_[solventMol].D) 
+        //printf("DIST  = %f\n", Dist);
+	if (Dist < SolventMols_[solventMol].D) 
           SolventMols_[solventMol].D = Dist;
       }
     }
@@ -383,7 +387,8 @@ void Action_Closest::Action_NoImage(Frame& frmIn,double maxD)
         {
           Dist = DIST2_NoImage(frmIn.XYZ(*solute_atom),
                        frmIn.XYZ(*solvent_atom));
-          if (Dist < SolventMols_[solventMol].D) 
+          //printf("no center DIST  = %f\n", Dist);
+	if (Dist < SolventMols_[solventMol].D) 
             SolventMols_[solventMol].D = Dist;
           if (debug_ > 2)
             mprintf("DEBUG: SolvMol %i, soluteAtom %i, solventAtom %i, D= %f, minD= %f\n",

@@ -50,7 +50,7 @@ dependclean:
 	/bin/rm -f FindDepend.o findDepend
 
 clean:
-	/bin/rm -f $(OBJECTS) a.out
+	/bin/rm -f *.o */*.o a.out
 
 uninstall: clean dependclean
 	/bin/rm -f config.h
