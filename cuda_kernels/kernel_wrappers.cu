@@ -48,7 +48,8 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   // printf("Nmols = %d; Natoms = %d\n", NMols, NAtoms);
   // printf("active_size =  %d\n", active_size);
   // printf("NBlocks =  %d\n", NBlocks);
-  // exit(0);
+  //printf("sezeof(double) = %d\n", sizeof(double));
+  //exit(0);
 
 
 
