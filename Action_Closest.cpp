@@ -203,22 +203,22 @@ printf("Done with kernel SEQ Kernel Time: %.2f\n", elapsed_time_seq);
 
 
 int type = 0;
-bool result;
+bool result = true;
 float elapsed_time_gpu;
 result = cuda_action(frmIn,maxD, ucell,recip,type, image_.ImagingEnabled(),elapsed_time_gpu); //handling all the data formatting and copying etc
 // we will only care about kernel time
 //fixing the overhead will be later
 
   if(result){
-    printf("CUDA PASS");
+    printf("CUDA PASS\n");
   }
   else{
-    printf("CUDA FAIL!");
+    printf("CUDA FAIL!\n");
   }
 
   printf("Seq Time:  = %0.2f\n", elapsed_time_seq);
   printf("CUDA Time: = %0.2f\n", elapsed_time_gpu);
-  printf("Speedup =  %0.2f\n", elapsed_time_gpu/elapsed_time_seq);
+  printf("Speedup =  %0.2f\n", elapsed_time_seq/elapsed_time_gpu);
 
 
   // Sort distances

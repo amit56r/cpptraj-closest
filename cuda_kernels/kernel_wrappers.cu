@@ -1,6 +1,8 @@
 
 #include <cstdio>
 
+
+
 // device kernel def
 __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, int Nmols , int NAtoms);
 
@@ -39,7 +41,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   dim3 dimBlock0 = dim3(NAtoms,1);
 
 
-  printf(" NMols =  %d, NAtoms = %d", NMols, NAtoms); 
+  printf("NMols =  %d, NAtoms = %d\n", NMols, NAtoms); 
   printf("About to launch kernel.\n");
 
 
