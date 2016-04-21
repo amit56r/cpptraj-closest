@@ -11,7 +11,7 @@ __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *Solvent
 	tx = threadIdx.x;
 	double Dist;
 
-	if(tx == 0 && bx == 0)
+	if(tx == 0 )
 		D_[bx] = maxD;
 	__syncthreads();
 
@@ -35,12 +35,12 @@ __global__ void Action_noImage_GPU(double *D_,double *maskCenter,double *Solvent
 	if( tx ==0 )
 	{
 		for(i  = 0 ; i < NAtoms ; i++ ){
-			sIndex = bx*NAtoms*3 + i*3
+			sIndex = bx*NAtoms*3 + i*3;
 			if (SolventMols_[sIndex]  < D_[bx]) 
 				D_[bx] = SolventMols_[sIndex];
 		}
 	}
 
-	if(tx == 0 && bx == 0 )
-		printf("end of kernel");
+	//if(tx == 0 && bx == 0 )
+	//	printf("end of kernel");
 }
