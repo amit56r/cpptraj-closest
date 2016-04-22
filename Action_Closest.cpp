@@ -189,7 +189,7 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
 
 //remove this ..TODOi
 
-useMaskCenter_ = true;
+useMaskCenter_ = false;
 
 cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
@@ -210,7 +210,10 @@ printf("Done with kernel SEQ Kernel Time: %.2f\n", elapsed_time_seq);
 int type = 0;
 bool result = true;
 float elapsed_time_gpu;
-result = cuda_action_center(frmIn,maxD,ucell ,recip ,type ,elapsed_time_gpu); //handling all the data formatting and copying etc
+if (useMaskCenter_)
+  result = cuda_action_center(frmIn,maxD,ucell ,recip ,type ,elapsed_time_gpu); 
+else
+  result = cuda_action_no_center(frmIn,maxD,ucell ,recip ,type ,elapsed_time_gpu);//handling all the data formatting and copying etc
 // we will only care about kernel time
 //fixing the overhead will be later
 
