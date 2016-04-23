@@ -152,12 +152,15 @@ __global__ void Action_noImage_no_center_GPU(double *D_,double *SolventMols_,dou
 		for(i  = 0 ; i  < NChunks ; i++)
 		{
 			//copying to shared
-			if (threadIdx.x < (end - start))
-				sAtom_shared[threadIdx.x] = Solute_atoms[start + threadIdx.x];
+			//if (threadIdx.x < (end - start))
+			//	sAtom_shared[threadIdx.x] = Solute_atoms[start + threadIdx.x];
+
+			//__syncthreads();
 
 			//TODO - add skew per thread 
 			for (j = start ; j < end; j+=3 )
 			{
+				//int offset = start + (j + threadIdx.x)%(end - start);
 				double x = Solute_atoms[j + 0]  - a0;
 				double y = Solute_atoms[j + 1]  - a1;
 				double z = Solute_atoms[j + 2]  - a2;
