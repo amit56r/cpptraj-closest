@@ -193,9 +193,12 @@ useMaskCenter_ = false;
 cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
 
-for( bool value : {true, false})
+bool v[2] = { true, false };
+
+for(int k =0 ; k < 2 ; k++)
 {
-  printf("Solute Center : %s\n", value : "YES" : "NO");
+  printf("Solute Center : %s\n", v[k] ? "YES" : "NO");
+  useMaskCenter_ = v[k];
 
 cudaEventCreate(&start_event);
 cudaEventCreate(&stop_event);
