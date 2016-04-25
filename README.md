@@ -1,3 +1,16 @@
+
+ To run this right out of the box:
+ ```
+ export SHADER_MODEL XX
+ make 
+ ./a.out
+
+ ```
+ where ```xx``` is the compute capability of the GPU on that system (can be found by using devicequery)
+
+
+
+
  
  
  The following need to be done in order to integrate into cpptraj 

@@ -190,9 +190,13 @@ Action_Closest::RetType Action_Closest::DoAction(int frameNum, Frame& frmIn) {
 //remove this ..TODOi
 
 useMaskCenter_ = false;
-
 cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
+
+for( bool value : {true, false})
+{
+  printf("Solute Center : %s\n", value : "YES" : "NO");
+
 cudaEventCreate(&start_event);
 cudaEventCreate(&stop_event);
 cudaEventRecord(start_event, 0);
@@ -228,7 +232,7 @@ else
   printf("Seq Time:  = %0.2f\n", elapsed_time_seq);
   printf("CUDA Time: = %0.2f\n", elapsed_time_gpu);
   printf("Speedup =  %0.2f\n", elapsed_time_seq/elapsed_time_gpu);
-
+}
 
   // Sort distances
   std::sort( SolventMols_.begin(), SolventMols_.end(), moldist_cmp() );
