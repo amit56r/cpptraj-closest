@@ -14,7 +14,7 @@ __global__ void Action_noImage_no_center_GPU(double *D_,double *SolventMols_,dou
 
 
 
-void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols, int NAtoms, float &time_gpu)
+void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols, int NAtoms, float &time_gpu,int type, double box[3])
 {
 
 
@@ -24,6 +24,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   double *devI2Ptr;
   double *devI1Ptr;
   double *devO1Ptr;
+  double *boxDev;
   int t4;
   int t2;
   double Dist;
@@ -86,7 +87,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_atoms,double maxD,int  NMols, int NAtoms,int NSAtoms, float &time_gpu)
+void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_atoms,double maxD,int  NMols, int NAtoms,int NSAtoms, float &time_gpu, int type,double box[3])
 {
 
 

@@ -9,8 +9,8 @@
 #define TOL 1e-7
 
 //kernel_wrapper defs
-void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols,int NAtoms, float &time_gpu);
-void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_atoms,double maxD,int  NMols,int NAtoms, int NSAtoms, float &time_gpu);
+void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3],double maxD,int  NMols,int NAtoms, float &time_gpu, int type , double box[3]);
+void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_atoms,double maxD,int  NMols,int NAtoms, int NSAtoms, float &time_gpu,int type, double box[3]);
 
 ///////////////////////////
 
@@ -22,6 +22,9 @@ bool Action_Closest::cuda_action_center(Frame& frmIn, double maxD, Matrix_3x3 uc
 {
 	Vec3 maskCenter_holder =  frmIn.VGeometricCenter( distanceMask_ );
 	double* maskCenter = maskCenter_holder.Dptr();
+	Box frmBox = frmIn.BoxCrd();
+	double box[3] = {frmBox[0], frmBox[1],frmBox[2]};
+
 
 	//allocate space and rewrite 
 	int NMols = SolventMols_.size();
@@ -49,7 +52,7 @@ bool Action_Closest::cuda_action_center(Frame& frmIn, double maxD, Matrix_3x3 uc
 	//need to handle cases as well 
 	//TODO
 
-	Action_NoImage_Center(linear_Solvent, D_, maskCenter, maxD, NMols, NAtoms,time_gpu);
+	Action_NoImage_Center(linear_Solvent, D_, maskCenter, maxD, NMols, NAtoms,time_gpu,type,box);
 
 
 	//
@@ -86,6 +89,8 @@ bool Action_Closest::cuda_action_no_center(Frame& frmIn, double maxD, Matrix_3x3
 	Vec3 maskCenter_holder =  frmIn.VGeometricCenter( distanceMask_ );
 	double* maskCenter = maskCenter_holder.Dptr();
 	AtomMask::const_iterator solute_atom;
+	Box frmBox = frmIn.BoxCrd();
+	double box[3] = {frmBox[0], frmBox[1],frmBox[2]};
 
 	//allocate space and rewrite 
 	int NMols = SolventMols_.size();
@@ -128,7 +133,7 @@ bool Action_Closest::cuda_action_no_center(Frame& frmIn, double maxD, Matrix_3x3
 	//need to handle cases as well 
 	//TODO
 
-	Action_NoImage_no_Center(linear_Solvent, D_, Solute_atoms, maxD, NMols, NAtoms, NSAtoms, time_gpu);
+	Action_NoImage_no_Center(linear_Solvent, D_, Solute_atoms, maxD, NMols, NAtoms, NSAtoms, time_gpu,type,box);
 
 
 	//
