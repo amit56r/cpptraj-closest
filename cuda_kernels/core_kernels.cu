@@ -372,9 +372,13 @@ __global__ void Action_ImageOrtho_no_center_GPU(double *D_,double *SolventMols_,
 				if (z<0) z=-z;
 		  		// Get rid of multiples of box lengths 
 				//TODO  WIERD that should be a way to simplify it
-				while (x > box[0]) x = x - box[0];
-				while (y > box[1]) y = y - box[1];
-				while (z > box[2]) z = z - box[2];
+				//while (x > box[0]) x = x - box[0];
+				//while (y > box[1]) y = y - box[1];
+				//while (z > box[2]) z = z - box[2];
+
+				x = x - box[0]*((int)x/box[0]);
+				y = y - box[0]*((int)y/box[1]);
+				z = z - box[0]*((int)z/box[2]);
 		  	// Find shortest distance in periodic reference
 				double D = box[0] - x;
 				if (D < x) x = D;
