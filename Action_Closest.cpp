@@ -195,10 +195,12 @@ float elapsed_time_seq;
 
 bool v[2] = { true, false };
 int type = 1;
+char* dict[3] = {"NONE", "ORTHO", "NON-ORTHO"};
 
 for(int k =0 ; k < 2 ; k++)
 {
   printf("Solute Center : %s\n", v[k] ? "YES" : "NO");
+  printf("Imaging : %s\n", dict[type]); 
   useMaskCenter_ = v[k];
 
 cudaEventCreate(&start_event);
