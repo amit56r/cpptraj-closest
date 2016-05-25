@@ -194,6 +194,7 @@ cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
 
 bool v[2] = { true, false };
+int type = 1;
 
 for(int k =0 ; k < 2 ; k++)
 {
@@ -204,8 +205,17 @@ cudaEventCreate(&start_event);
 cudaEventCreate(&stop_event);
 cudaEventRecord(start_event, 0);
 
-//serial section of the code 
-Action_NoImage(frmIn,maxD);
+//serial section of the code
+if (type == 0 )
+  Action_NoImage(frmIn,maxD);
+else if (type == 1)
+  Action_ImageOrtho(frmIn,maxD);
+else{
+  printf("Error, invalid imaging type\n");
+  exit(1);
+}
+
+
 
 cudaThreadSynchronize();
 cudaEventRecord(stop_event, 0);
@@ -214,7 +224,7 @@ cudaEventElapsedTime(&elapsed_time_seq,start_event, stop_event );
 printf("Done with kernel SEQ Kernel Time: %.2f\n", elapsed_time_seq);
 
 
-int type = 0;
+
 bool result = true;
 float elapsed_time_gpu;
 if (useMaskCenter_)

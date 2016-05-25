@@ -8,6 +8,14 @@
 __global__ void Action_noImage_center_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, int Nmols , int NAtoms, int active_size);
 __global__ void Action_noImage_no_center_GPU(double *D_,double *SolventMols_,double *Solute_atoms ,double maxD, int Nmols , int NAtoms,int NSAtoms , int active_size);
 
+
+//for imaging with ortho
+__global__ void Action_ImageOrtho_center_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, double *box, int Nmols , int NAtoms, int active_size);
+__global__ void Action_ImageOrtho_no_center_GPU(double *D_,double *SolventMols_,double *Solute_atoms ,double maxD, double *box, int Nmols , int NAtoms,int NSAtoms , int active_size);
+
+//for imaging with NONortho
+//TODO
+
 ////////////////////////
 
 
@@ -34,10 +42,15 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
 
 
   cudaMalloc(((void **)(&devO1Ptr)),NMols * sizeof(double ));
+  
   cudaMalloc(((void **)(&devI1Ptr)),3 * sizeof(double ));
   cudaMemcpy(devI1Ptr,maskCenter,3 * sizeof(double ),cudaMemcpyHostToDevice);
+  
   cudaMalloc(((void **)(&devI2Ptr)),NMols * NAtoms * 3 * sizeof(double ));
   cudaMemcpy(devI2Ptr,SolventMols_,NMols * NAtoms * 3 * sizeof(double ),cudaMemcpyHostToDevice);
+
+  cudaMalloc((void**)(&boxDev), 3 * sizeof(double));
+  cudaMemcpy(boxDev,box, 3 * sizeof(double), cudaMemcpyHostToDevice);
 
 
 
@@ -67,7 +80,13 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   cudaEventCreate(&stop_event);
   cudaEventRecord(start_event, 0);
 
-  Action_noImage_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD, NMols, NAtoms,active_size);
+  if(type == 0)
+    Action_noImage_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD, NMols, NAtoms,active_size);
+  else if (type == 1)
+    Action_ImageOrtho_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD,box, NMols, NAtoms,active_size);
+  else
+    printf("kernel_wrapper: error in type\n");
+
   
   cudaThreadSynchronize();
   cudaEventRecord(stop_event, 0);
@@ -83,6 +102,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   cudaFree(devO1Ptr);
   cudaFree(devI1Ptr);
   cudaFree(devI2Ptr);
+  cudaFree(boxDev);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +118,7 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   double *devI2Ptr;
   double *devI1Ptr;
   double *devO1Ptr;
+   double *boxDev;
   int t4;
   int t2;
   double Dist;
@@ -116,6 +137,9 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   cudaMalloc(((void **)(&devI3Ptr)), NSAtoms * 3 * sizeof(double ));
   cudaMemcpy(devI3Ptr,Solute_atoms,NSAtoms * 3 * sizeof(double ),cudaMemcpyHostToDevice);
 
+  cudaMalloc((void**)(&boxDev), 3 * sizeof(double));
+  cudaMemcpy(boxDev,box, 3 * sizeof(double), cudaMemcpyHostToDevice);
+
 
 
   //figue out the decomposition here
@@ -144,7 +168,12 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   cudaEventCreate(&stop_event);
   cudaEventRecord(start_event, 0);
 
-  Action_noImage_no_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr, devI2Ptr,devI3Ptr, maxD, NMols, NAtoms,NSAtoms,active_size);
+  if(type == 0)
+    Action_noImage_no_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr, devI2Ptr,devI3Ptr, maxD, NMols, NAtoms,NSAtoms,active_size);
+  else if(type == 1)
+    Action_ImageOrtho_no_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr, devI2Ptr,devI3Ptr, maxD, box,  NMols, NAtoms,NSAtoms,active_size);
+  else
+    printf("kernel_wrapper: error in type no center version\n");
   
   cudaThreadSynchronize();
   cudaEventRecord(stop_event, 0);
@@ -161,4 +190,5 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   cudaFree(devI1Ptr);
   cudaFree(devI2Ptr);
   cudaFree(devI3Ptr);
+  cudaFree(boxDev);
 }
