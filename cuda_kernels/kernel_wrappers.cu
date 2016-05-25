@@ -49,7 +49,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   cudaMalloc(((void **)(&devI2Ptr)),NMols * NAtoms * 3 * sizeof(double ));
   cudaMemcpy(devI2Ptr,SolventMols_,NMols * NAtoms * 3 * sizeof(double ),cudaMemcpyHostToDevice);
 
-  cudaMalloc((void**)(&boxDev), 3 * sizeof(double));
+  cudaMalloc(((void**)(&boxDev)), 3 * sizeof(double));
   cudaMemcpy(boxDev,box, 3 * sizeof(double), cudaMemcpyHostToDevice);
 
 
@@ -83,7 +83,7 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   if(type == 0)
     Action_noImage_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD, NMols, NAtoms,active_size);
   else if (type == 1)
-    Action_ImageOrtho_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD,box, NMols, NAtoms,active_size);
+    Action_ImageOrtho_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr,devI1Ptr, devI2Ptr, maxD,boxDev, NMols, NAtoms,active_size);
   else
     printf("kernel_wrapper: error in type\n");
 
@@ -118,7 +118,7 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   double *devI2Ptr;
   double *devI1Ptr;
   double *devO1Ptr;
-   double *boxDev;
+  double *boxDev;
   int t4;
   int t2;
   double Dist;
@@ -137,7 +137,7 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   cudaMalloc(((void **)(&devI3Ptr)), NSAtoms * 3 * sizeof(double ));
   cudaMemcpy(devI3Ptr,Solute_atoms,NSAtoms * 3 * sizeof(double ),cudaMemcpyHostToDevice);
 
-  cudaMalloc((void**)(&boxDev), 3 * sizeof(double));
+  cudaMalloc(((void**)(&boxDev)), 3 * sizeof(double));
   cudaMemcpy(boxDev,box, 3 * sizeof(double), cudaMemcpyHostToDevice);
 
 
@@ -171,7 +171,7 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   if(type == 0)
     Action_noImage_no_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr, devI2Ptr,devI3Ptr, maxD, NMols, NAtoms,NSAtoms,active_size);
   else if(type == 1)
-    Action_ImageOrtho_no_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr, devI2Ptr,devI3Ptr, maxD, box,  NMols, NAtoms,NSAtoms,active_size);
+    Action_ImageOrtho_no_center_GPU<<<dimGrid0,dimBlock0>>>(devO1Ptr, devI2Ptr,devI3Ptr, maxD, boxDev,  NMols, NAtoms,NSAtoms,active_size);
   else
     printf("kernel_wrapper: error in type no center version\n");
   
@@ -187,7 +187,7 @@ void Action_NoImage_no_Center(double *SolventMols_,double *D_, double *Solute_at
   
   cudaMemcpy(D_,devO1Ptr,NMols * sizeof(double ),cudaMemcpyDeviceToHost);
   cudaFree(devO1Ptr);
-  cudaFree(devI1Ptr);
+  //cudaFree(devI1Ptr);
   cudaFree(devI2Ptr);
   cudaFree(devI3Ptr);
   cudaFree(boxDev);
