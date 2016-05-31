@@ -194,7 +194,7 @@ cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
 
 bool v[2] = { true, false };
-int type = 1;
+int type = 0;   //keep it no imaging (as of now)
 char* dict[3] = {"NONE", "ORTHO", "NON-ORTHO"};
 
 for(int k =0 ; k < 2 ; k++)
