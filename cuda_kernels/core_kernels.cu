@@ -2,6 +2,7 @@
 
 #define BLOCKDIM 1024
 #define RSIZE 1024
+#define JFACTOR 1
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
@@ -34,7 +35,6 @@ __global__ void Action_noImage_center_GPU(double *D_,double *maskCenter,double *
 
 		int sIndex =  mol*NAtoms*3;
 		double min_val  = maxD;
-
 		for(int offset  = 0 ; offset < NAtoms ; offset++ )
 		{
 
@@ -47,6 +47,8 @@ __global__ void Action_noImage_center_GPU(double *D_,double *maskCenter,double *
 		}
 
 		D_[mol] = min_val;
+
+
 
 
 
@@ -174,13 +176,16 @@ __global__ void Action_noImage_no_center_GPU(double *D_,double *SolventMols_,dou
 //------------------------------------------------------------------------------------------------------------------------------------------------
 __global__ void Action_ImageOrtho_center_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, double *box, int Nmols , int NAtoms, int active_size)
 {
-	__shared__ double dist_array[BLOCKDIM];
+
+	//__shared__ double dist_array[BLOCKDIM];
 
 
 
-	int mol  =  (blockIdx.x * active_size + threadIdx.x)/NAtoms; 
-	int atom  = (blockIdx.x * active_size + threadIdx.x) - (mol * NAtoms);
+	//int mol  =  (blockIdx.x * active_size + threadIdx.x)/NAtoms; 
+	//int atom  = (blockIdx.x * active_size + threadIdx.x) - (mol * NAtoms);
 	//int mol_in_block = threadIdx.x/NAtoms;
+
+	int mol = blockIdx.x*BLOCKDIM + threadIdx.x;
 
 	//advantage of register
 	double a0 = maskCenter[0];
@@ -189,70 +194,57 @@ __global__ void Action_ImageOrtho_center_GPU(double *D_,double *maskCenter,doubl
 
 
 
-	if ( threadIdx.x < active_size && mol*NAtoms + atom < Nmols*NAtoms )
+	if ( mol < Nmols )
 	{
 
-		// if(atom == 0 )
-		// 	D_[mol] = maxD;
-		//__syncthreads();
 
 
-		int sIndex =  mol*NAtoms*3 + atom*3;
-
-		double x =  a0 - SolventMols_[sIndex + 0];
-		double y =  a1 - SolventMols_[sIndex + 1];
-		double z =  a2 - SolventMols_[sIndex + 2];
-
-		// Get rid of sign info
-		if (x<0) x=-x;
-		if (y<0) y=-y;
-		if (z<0) z=-z;
-		  // Get rid of multiples of box lengths 
-		//TODO  WIERD that should be a way to simplify it
-		while (x > box[0]) x = x - box[0];
-		while (y > box[1]) y = y - box[1];
-		while (z > box[2]) z = z - box[2];
-		  // Find shortest distance in periodic reference
-		double D = box[0] - x;
-		if (D < x) x = D;
-		D = box[1] - y;
-		if (D < y) y = D;  
-		D = box[2] - z;
-		if (D < z) z = D;
-
-
-
-
-	//Dist = x*x + y*y + z*z;
-		dist_array[threadIdx.x] = x*x + y*y + z*z;
-		if (box[0]==0.0 || box[1]==0.0 || box[2]==0.0)
-			dist_array[threadIdx.x] = -1.0;
-	//printf(" dist  =  %f\n", Dist);
-
-		__syncthreads();
-
-	//first thread
-	//naive approach to a reduction algorithm
-	//this works if NAtoms is small other wise you need split
-	//and do some of log(n) parallel reduction 
-		int i;
-
-
-
+		int sIndex =  mol*NAtoms*3;
 		double min_val  = maxD;
-		if( atom ==0 )
+		double dist;
+		for(int offset  = 0 ; offset < NAtoms ; offset++ )
 		{
-			for(i  = 0 ; i < NAtoms ; i++ ){
-				//sIndex = mol*NAtoms*3 + i*3;
-				//if (dist_array[threadIdx.x + i]  < min_val) 
-				//	min_val = dist_array[threadIdx.x + i] ;
-				min_val =  min(min_val, dist_array[threadIdx.x + i]);
-			}
-			D_[mol] = min_val;
+
+			double x = a0 - SolventMols_[sIndex++];
+			double y = a1 - SolventMols_[sIndex++];
+			double z = a2 - SolventMols_[sIndex++];
+
+					// Get rid of sign info
+			if (x<0) x=-x;
+			if (y<0) y=-y;
+			if (z<0) z=-z;
+		  	// Get rid of multiples of box lengths 
+			//TODO  WIERD that should be a way to simplify it
+			while (x > box[0]) x = x - box[0];
+			while (y > box[1]) y = y - box[1];
+			while (z > box[2]) z = z - box[2];
+		  	// Find shortest distance in periodic reference
+			double D = box[0] - x;
+			if (D < x) x = D;
+			D = box[1] - y;
+			if (D < y) y = D;  
+			D = box[2] - z;
+			if (D < z) z = D;
+
+
+
+
+			//Dist = x*x + y*y + z*z;
+			dist = x*x + y*y + z*z;
+			if (box[0]==0.0 || box[1]==0.0 || box[2]==0.0)
+				dist= -1.0;
+
+			min_val  =  min(min_val, dist);
+
 		}
 
-	//if(tx == 0 && bx == 0 )
-	//	printf("end of kernel");
+		D_[mol] = min_val;
+
+
+
+
+
+
 	}
 }
 
@@ -356,7 +348,7 @@ __global__ void Action_ImageOrtho_no_center_GPU(double *D_,double *SolventMols_,
 					dist = -1.0;
 
 
-		
+
 
 
 				//if (mol ==  11)

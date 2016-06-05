@@ -3,6 +3,7 @@
 #include <cmath>
 
 #define BLOCKDIM 1024
+#define JFACTOR 1
 
 
 // device kernel def
@@ -67,11 +68,11 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   //figure out how many active thread in a block
   int active_size  =  BLOCKDIM/NAtoms * NAtoms;
   //int NBlocks =  ceil(NMols * NAtoms / float(active_size));  //having unroll factor
-  int NBlocks = ceil(float(NMols)/ BLOCKDIM);
+  int NBlocks = ceil(float(NMols)/ (BLOCKDIM));
 
   // printf("Nmols = %d; Natoms = %d\n", NMols, NAtoms);
   // printf("active_size =  %d\n", active_size);
-  //printf("NBlocks =  %d\n", NBlocks);
+  printf("NBlocks =  %d\n", NBlocks);
   //printf("sezeof(double) = %d\n", sizeof(double));
   //exit(0);
 
