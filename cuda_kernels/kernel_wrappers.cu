@@ -3,7 +3,7 @@
 #include <cmath>
 
 #define BLOCKDIM 1024
-#define C_FACTOR 4
+
 
 // device kernel def
 __global__ void Action_noImage_center_GPU(double *D_,double *maskCenter,double *SolventMols_,double maxD, int Nmols , int NAtoms, int active_size);
@@ -58,12 +58,20 @@ void Action_NoImage_Center(double *SolventMols_,double *D_, double maskCenter[3]
   //figue out the decomposition here
   //we need to pad as well
 
+ // due to lack to  using center, each thread is going  rocess the solvent mol 
+ //instead of atoms (make it alot easier)   (speacially for the imaging case)
+
+
+
+
   //figure out how many active thread in a block
   int active_size  =  BLOCKDIM/NAtoms * NAtoms;
-  int NBlocks =  ceil(NMols * NAtoms / float(active_size * C_FACTOR));  //having unroll factor
+  //int NBlocks =  ceil(NMols * NAtoms / float(active_size));  //having unroll factor
+  int NBlocks = ceil(float(NMols)/ BLOCKDIM);
+
   // printf("Nmols = %d; Natoms = %d\n", NMols, NAtoms);
   // printf("active_size =  %d\n", active_size);
-  // printf("NBlocks =  %d\n", NBlocks);
+  //printf("NBlocks =  %d\n", NBlocks);
   //printf("sezeof(double) = %d\n", sizeof(double));
   //exit(0);
 
