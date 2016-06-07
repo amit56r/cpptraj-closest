@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cmath>
 
-#define BLOCKDIM 1024
+#define BLOCKDIM 512
 #define JFACTOR 1
 
 

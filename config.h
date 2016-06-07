@@ -1,5 +1,5 @@
 # Configuration file for closest
-CXX=nvcc -arch=sm_$(SHADER_MODEL) -I .
+CXX=nvcc -Xptxas -v -arch=sm_$(SHADER_MODEL) -I .
 
 CXXFLAGS=-O3
 
