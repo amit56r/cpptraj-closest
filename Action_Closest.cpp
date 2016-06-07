@@ -194,7 +194,7 @@ cudaEvent_t start_event, stop_event;
 float elapsed_time_seq;
 
 bool v[2] = { true, false };
-int type = 1;   //keep it no imaging (as of now)
+int type = 2;   //keep it no imaging (as of now)
 char* dict[3] = {"NONE", "ORTHO", "NON-ORTHO"};
 
 for(int k =0 ; k < 2 ; k++)
@@ -212,6 +212,8 @@ if (type == 0 )
   Action_NoImage(frmIn,maxD);
 else if (type == 1)
   Action_ImageOrtho(frmIn,maxD);
+else if  (type == 2)
+  Action_ImageNonOrtho(frmIn, maxD, ucell, recip);
 else{
   printf("Error, invalid imaging type\n");
   exit(1);
