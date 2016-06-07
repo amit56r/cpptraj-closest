@@ -196,7 +196,8 @@ float elapsed_time_seq;
 bool v[2] = { true, false };
 int type = 2;   //keep it no imaging (as of now)
 char* dict[3] = {"NONE", "ORTHO", "NON-ORTHO"};
-
+for (int type  = 0; type < 3 ; type++){
+  printf("-------------------------------------------------------\n");
 for(int k =0 ; k < 2 ; k++)
 {
   printf("Solute Center : %s\n", v[k] ? "YES" : "NO");
@@ -249,6 +250,7 @@ else
   printf("Seq Time:  = %0.2f\n", elapsed_time_seq);
   printf("CUDA Time: = %0.2f\n", elapsed_time_gpu);
   printf("Speedup =  %0.2f\n", elapsed_time_seq/elapsed_time_gpu);
+}
 }
 
   // Sort distances

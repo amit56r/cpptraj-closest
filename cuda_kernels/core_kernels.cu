@@ -436,8 +436,8 @@ __global__ void Action_ImageNonOrtho_center_GPU(double *D_,double *maskCenter,do
 			double y =  recip[3]*SolventMols_[sIndex + offset + 0] + recip[4]*SolventMols_[sIndex + offset + 1] + recip[5]*SolventMols_[sIndex + offset + 2];
 			double z =  recip[6]*SolventMols_[sIndex + offset + 0] + recip[7]*SolventMols_[sIndex + offset + 1] + recip[8]*SolventMols_[sIndex + offset + 2];
 			double dist  = NonOrtho_dist(x,y,z,a0,a1,a2,ucell);
-			if (mol ==  0)
-				printf("dist  = %f\n",dist);
+			// if (mol ==  0)
+			// 	printf("dist  = %f\n",dist);
 
 			min_val  =  min(min_val, dist);
 
