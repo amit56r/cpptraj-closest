@@ -247,9 +247,9 @@ else
     exit(0);
   }
 
-  printf("Seq Time:  = %0.2f\n", elapsed_time_seq);
-  printf("CUDA Time: = %0.2f\n", elapsed_time_gpu);
-  printf("Speedup =  %0.2f\n", elapsed_time_seq/elapsed_time_gpu);
+  printf("->#Seq Time:  = %0.2f\n", elapsed_time_seq);
+  printf("->#CUDA Time: = %0.2f\n", elapsed_time_gpu);
+  printf("->#Speedup =  %0.2f\n", elapsed_time_seq/elapsed_time_gpu);
 }
 }
 
