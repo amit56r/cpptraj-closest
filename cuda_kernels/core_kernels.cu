@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define BLOCKDIM 512
-#define RSIZE 1024
+#define RSIZE 10
 #define JFACTOR 1
 
 
